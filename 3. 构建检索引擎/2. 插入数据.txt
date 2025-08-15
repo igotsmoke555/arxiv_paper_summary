@@ -1,0 +1,19 @@
+import json
+from elasticsearch import Elasticsearch
+
+es = Elasticsearch("http://localhost:9200")
+
+def insert(es, file_path, index_name):
+    num = 0
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            num += 1
+            data = json.loads(line)
+            es.index(
+                index=index_name,
+                #id="my_document_id",
+                document=data,
+            )
+            print(num)
+
+insert(es, "/home/ecs-user/data/merged_summary_org_infos_emb_data_tmp.jsonl", 'papers-index')
